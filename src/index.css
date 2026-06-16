@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #0a0a0a;
+  color: #ffffff;
+}
+
+.orange-badge {
+  @apply bg-orange-500 text-white px-2 py-1 rounded text-xs font-semibold;
+}
+
+.card-dark {
+  @apply bg-gray-900 rounded-lg overflow-hidden;
+}
