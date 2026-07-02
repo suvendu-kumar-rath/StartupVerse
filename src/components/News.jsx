@@ -1,12 +1,49 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { getAllPosts, getAllCategories } from '../services/api'
 
 export default function News() {
   const [selectedCategory, setSelectedCategory] = useState('ALL')
   const [searchQuery, setSearchQuery] = useState('')
+  const [articles, setArticles] = useState([])
+  const [categories, setCategories] = useState(['ALL', 'FUNDING', 'AI', 'FOUNDERS', 'CLIMATE', 'M&A', 'ANALYSIS', 'FAILURES', 'HARDWARE'])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
-  const categories = ['ALL', 'FUNDING', 'AI', 'FOUNDERS', 'CLIMATE', 'M&A', 'ANALYSIS', 'FAILURES', 'HARDWARE']
+  // Fetch posts and categories on component mount
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true)
+        
+        // Fetch posts
+        const postsResponse = await getAllPosts(1, 50)
+        if (postsResponse.success && postsResponse.data) {
+          setArticles(postsResponse.data.posts || [])
+        } else {
+          console.warn('Failed to fetch posts, using empty array')
+          setArticles([])
+        }
+        
+        // Fetch categories
+        const categoriesResponse = await getAllCategories()
+        if (categoriesResponse.success && categoriesResponse.data) {
+          const categoryNames = categoriesResponse.data.map(cat => cat.name || cat).filter(Boolean)
+          setCategories(['ALL', ...categoryNames])
+        }
+      } catch (err) {
+        console.error('Error fetching data:', err)
+        setError(err.message)
+        setArticles([])
+      } finally {
+        setLoading(false)
+      }
+    }
 
-  const articles = [
+    fetchData()
+  }, [])
+
+  // Fallback articles if API fails
+  const fallbackArticles = [
     {
       id: 1,
       category: 'FUNDING',
@@ -147,12 +184,31 @@ export default function News() {
 
   const trendingTags = ['#AI', '#Funding', '#VC', '#IPO', '#Climate', '#Biotech', '#Fintech']
 
+  // Use fetched articles or fallback if empty
+  const displayArticles = articles.length > 0 ? articles : fallbackArticles
+  
   const filteredArticles = selectedCategory === 'ALL' 
-    ? articles 
-    : articles.filter(article => article.category === selectedCategory)
+    ? displayArticles 
+    : displayArticles.filter(article => article.category === selectedCategory)
+
+  if (loading) {
+    return (
+      <div className="bg-black text-white min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mb-4"></div>
+          <p className="text-gray-400">Loading news...</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="bg-black text-white min-h-screen">
+      {error && (
+        <div className="bg-red-900/20 border border-red-500 text-red-200 px-4 py-2 max-w-6xl mx-auto mt-4 rounded">
+          Note: Using cached data. API Error: {error}
+        </div>
+      )}
       {/* Header Section */}
       <section className="max-w-6xl mx-auto px-6 py-12">
         <div className="mb-6">

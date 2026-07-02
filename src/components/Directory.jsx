@@ -1,23 +1,20 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { getAllPosts } from '../services/api'
 
-export default function Directory() {
-  const [searchQuery, setSearchQuery] = useState('')
-  const [filterStage, setFilterStage] = useState('All')
-
-  const companies = [
-    {
-      id: 1,
-      initials: 'LA',
-      name: 'Lumen AI',
-      founder: 'Riya Kapoor',
-      location: 'Bangalore, IN',
-      funding: '$612M',
-      stage: 'Series C'
-    },
-    {
-      id: 2,
-      initials: 'VG',
-      name: 'Volta Grid',
+const fallbackCompanies = [
+  {
+    id: 1,
+    initials: 'LA',
+    name: 'Lumen AI',
+    founder: 'Riya Kapoor',
+    location: 'Bangalore, IN',
+    funding: '$612M',
+    stage: 'Series C'
+  },
+  {
+    id: 2,
+    initials: 'VG',
+    name: 'Volta Grid',
       founder: 'Sam Okafor',
       location: 'Berlin, DE',
       funding: '$180M',
@@ -78,6 +75,37 @@ export default function Directory() {
       stage: 'Series A'
     }
   ]
+
+export default function Directory() {
+  const [searchQuery, setSearchQuery] = useState('')
+  const [filterStage, setFilterStage] = useState('All')
+  const [companies, setCompanies] = useState(fallbackCompanies)
+
+  useEffect(() => {
+    const fetchCompanies = async () => {
+      try {
+        const response = await getAllPosts(1, 100)
+        if (response.success && response.data?.posts) {
+          // Map posts to company format
+          const mappedCompanies = response.data.posts.map((post, idx) => ({
+            id: post.id || idx + 1,
+            initials: post.title?.substring(0, 2).toUpperCase() || 'CO',
+            name: post.title?.split(' ')[0] || 'Company',
+            founder: post.author || 'Unknown',
+            location: post.category || 'Unknown',
+            funding: post.amount || '$0M',
+            stage: post.stage || 'Series A'
+          }))
+          setCompanies(mappedCompanies.length > 0 ? mappedCompanies : fallbackCompanies)
+        }
+      } catch (error) {
+        console.error('Error fetching companies:', error)
+        setCompanies(fallbackCompanies)
+      }
+    }
+
+    fetchCompanies()
+  }, [])
 
   const stages = ['All', 'Seed', 'Seed+', 'Series A', 'Series B', 'Series C', 'Series D']
 

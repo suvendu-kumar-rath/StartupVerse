@@ -1,26 +1,28 @@
-export default function Stories() {
-  const founderInterviews = [
-    {
-      id: 1,
-      category: 'FOUNDERS',
-      title: 'The quiet epidemic: why 1 in 3 founders are walking away in 2026',
-      author: 'Marcus Chen',
-      date: 'Jun 9, 2026',
-      readTime: '12 min',
-      image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=500&h=400&fit=crop'
-    },
-    {
-      id: 2,
-      category: 'ANALYSIS',
-      title: 'We read every pitch in VC W26. Three patterns to watch.',
-      author: 'Sofia Martinez',
-      date: 'Jun 6, 2026',
-      readTime: '9 min',
-      image: 'https://images.unsplash.com/photo-1516534775068-bb8fce2fcc91?w=500&h=400&fit=crop'
-    }
+import { useState, useEffect } from 'react'
+import { getAllPosts } from '../services/api'
+
+const fallbackFounderInterviews = [
+  {
+    id: 1,
+    category: 'FOUNDERS',
+    title: 'The quiet epidemic: why 1 in 3 founders are walking away in 2026',
+    author: 'Marcus Chen',
+    date: 'Jun 9, 2026',
+    readTime: '12 min',
+    image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=500&h=400&fit=crop'
+  },
+  {
+    id: 2,
+    category: 'ANALYSIS',
+    title: 'We read every pitch in VC W26. Three patterns to watch.',
+    author: 'Sofia Martinez',
+    date: 'Jun 6, 2026',
+    readTime: '9 min',
+    image: 'https://images.unsplash.com/photo-1516534775068-bb8fce2fcc91?w=500&h=400&fit=crop'
+  }
   ]
 
-  const successStories = [
+  const fallbackSuccessStories = [
     {
       id: 3,
       category: 'FUNDING',
@@ -59,7 +61,7 @@ export default function Stories() {
     }
   ]
 
-  const failureStories = [
+  const fallbackFailureStories = [
     {
       id: 7,
       category: 'M&A',
@@ -79,6 +81,28 @@ export default function Stories() {
       image: 'https://images.unsplash.com/photo-1452587344148-ce2e76319e12?w=500&h=400&fit=crop'
     }
   ]
+
+export default function Stories() {
+  const [founderInterviews, setFounderInterviews] = useState(fallbackFounderInterviews)
+  const [successStories, setSuccessStories] = useState(fallbackSuccessStories)
+  const [failureStories, setFailureStories] = useState(fallbackFailureStories)
+
+  useEffect(() => {
+    const fetchStories = async () => {
+      try {
+        const response = await getAllPosts(1, 50)
+        if (response.success && response.data?.posts) {
+          setFounderInterviews(response.data.posts.slice(0, 2).length > 0 ? response.data.posts.slice(0, 2) : fallbackFounderInterviews)
+          setSuccessStories(response.data.posts.slice(2, 6).length > 0 ? response.data.posts.slice(2, 6) : fallbackSuccessStories)
+          setFailureStories(response.data.posts.slice(6, 8).length > 0 ? response.data.posts.slice(6, 8) : fallbackFailureStories)
+        }
+      } catch (error) {
+        console.error('Error fetching stories:', error)
+      }
+    }
+
+    fetchStories()
+  }, [])
 
   const StoryCard = ({ story }) => (
     <div className="card-dark hover:bg-gray-900 transition cursor-pointer group overflow-hidden">

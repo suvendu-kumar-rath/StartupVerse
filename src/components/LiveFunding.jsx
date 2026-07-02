@@ -1,4 +1,7 @@
-const fundingItems = [
+import { useState, useEffect } from 'react'
+import { getAllPosts } from '../services/api'
+
+const fallbackFundingItems = [
   { company: 'Lumen AI', amount: '$450M', round: 'Series C', note: 'led by Sequoia' },
   { company: 'Volta Grid', amount: '$120M', round: 'Series B', note: 'led by Khosla' },
   { company: 'Northwind Robotics', amount: '$78M', round: 'Series A', note: 'led by Accel' },
@@ -6,6 +9,33 @@ const fundingItems = [
 ]
 
 export default function LiveFunding() {
+  const [fundingItems, setFundingItems] = useState([])
+
+  useEffect(() => {
+    const fetchFundingData = async () => {
+      try {
+        // Fetch trending/funding posts from API
+        const response = await getAllPosts(1, 10, null, true)
+        if (response.success && response.data?.posts) {
+          // Map API posts to funding items format
+          const items = response.data.posts.map(post => ({
+            company: post.title?.split(' ')[0] || 'Company',
+            amount: post.amount || '$0M',
+            round: post.round || 'N/A',
+            note: post.note || ''
+          }))
+          setFundingItems(items.length > 0 ? items : fallbackFundingItems)
+        } else {
+          setFundingItems(fallbackFundingItems)
+        }
+      } catch (error) {
+        console.error('Error fetching funding data:', error)
+        setFundingItems(fallbackFundingItems)
+      }
+    }
+
+    fetchFundingData()
+  }, [])
   // Duplicate items for seamless loop
   const repeatedItems = [...fundingItems, ...fundingItems]
 
