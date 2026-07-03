@@ -49,7 +49,7 @@ export default function LatestSection() {
                 <span className="text-xs font-semibold text-orange-500">{article.category || 'NEWS'}</span>
                 <h3 className="font-bold text-lg mt-2 mb-3 line-clamp-2">{article.title}</h3>
                 <div className="flex justify-between text-xs text-gray-400">
-                  <span>{article.author || 'Staff'}</span>
+                  <span>{typeof article.author === 'object' ? article.author?.name : article.author || 'Staff'}</span>
                   <span>{article.readTime || '5 min'}</span>
                 </div>
               </div>

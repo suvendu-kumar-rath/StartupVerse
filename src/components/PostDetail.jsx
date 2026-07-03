@@ -1,34 +1,37 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Share2, Copy, Share, MessageCircle, Mail } from 'lucide-react'
+import { getPostById } from '../services/api'
 
 export default function PostDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const [post, setPost] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
   const [showShareMenu, setShowShareMenu] = useState(false)
   const [copied, setCopied] = useState(false)
 
-  // Mock post data - replace with actual API call
-  const post = {
-    id: id,
-    title: 'Inside the $450M raise that made Lumen AI the fastest unicorn of 2026',
-    author: 'Anarya Rao',
-    date: 'Jun 10, 2026',
-    readTime: '8 min',
-    category: 'FUNDING',
-    image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=500&fit=crop',
-    content: `A deep dive into how Lumen AI secured one of the largest Series C rounds in AI infrastructure history. 
-    
-This $450M funding round, led by Sequoia Capital, marks a significant milestone in the AI industry. The company has grown from its founding in 2023 to becoming the fastest unicorn in the space, achieving a $3B valuation in record time.
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        setLoading(true)
+        const response = await getPostById(id)
+        if (response.success && response.data) {
+          setPost(response.data)
+        } else {
+          setError('Failed to load post')
+        }
+      } catch (err) {
+        console.error('Error fetching post:', err)
+        setError('Error loading post')
+      } finally {
+        setLoading(false)
+      }
+    }
 
-Key highlights from the funding round:
-• Led by Sequoia Capital with participation from leading VCs
-• Used for expanding AI infrastructure and R&D
-• Plans to expand operations to 15 new countries
-• Strategic partnerships with major cloud providers
-
-The interview reveals insights from both the founders and the investment team about what this milestone means for the future of AI infrastructure and the broader startup ecosystem.`
-  }
+    fetchPost()
+  }, [id])
 
   const currentUrl = typeof window !== 'undefined' ? window.location.href : ''
 
@@ -60,6 +63,44 @@ The interview reveals insights from both the founders and the investment team ab
     window.open(shareUrl, '_blank', 'width=600,height=400')
   }
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mb-4"></div>
+          <p className="text-gray-400">Loading post...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error || !post) {
+    return (
+      <div className="min-h-screen bg-black text-white">
+        <div className="max-w-4xl mx-auto px-6 py-8">
+          <button
+            onClick={() => navigate(-1)}
+            className="text-orange-500 hover:text-orange-400 mb-6 font-semibold"
+          >
+            ← Back
+          </button>
+          <div className="text-center py-12">
+            <h2 className="text-2xl font-bold mb-4">Post not found</h2>
+            <p className="text-gray-400 mb-6">{error || 'The post you are looking for does not exist.'}</p>
+            <button
+              onClick={() => navigate('/news')}
+              className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded font-semibold transition"
+            >
+              Go to News
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  const authorName = typeof post.author === 'object' ? post.author?.name : post.author || 'Staff'
+
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Header */}
@@ -78,11 +119,11 @@ The interview reveals insights from both the founders and the investment team ab
 
           {/* Meta Info */}
           <div className="flex items-center gap-4 text-gray-400 mb-6">
-            <span>{post.author}</span>
+            <span>{authorName}</span>
             <span>•</span>
-            <span>{post.date}</span>
+            <span>{new Date(post.createdAt).toLocaleDateString() || post.date}</span>
             <span>•</span>
-            <span>{post.readTime} read</span>
+            <span>{post.readTime || '5'} min read</span>
           </div>
 
           {/* Share Button */}
@@ -142,7 +183,7 @@ The interview reveals insights from both the founders and the investment team ab
 
         {/* Featured Image */}
         <img
-          src={post.image}
+          src={post.image || post.thumbnail || 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=500&fit=crop'}
           alt={post.title}
           className="w-full rounded-lg mb-12 object-cover h-96"
         />
@@ -150,7 +191,7 @@ The interview reveals insights from both the founders and the investment team ab
         {/* Post Content */}
         <div className="prose prose-invert max-w-none mb-12">
           <div className="text-lg text-gray-300 leading-relaxed whitespace-pre-wrap">
-            {post.content}
+            {post.content || post.description || 'No content available for this post.'}
           </div>
         </div>
 

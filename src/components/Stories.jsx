@@ -46,7 +46,7 @@ export default function Stories() {
             {story.title}
           </h3>
           <div className="flex justify-between text-xs text-gray-400">
-            <span>{story.author || 'Staff'}</span>
+            <span>{typeof story.author === 'object' ? story.author?.name : story.author || 'Staff'}</span>
             <span>{story.readTime || '5 min'}</span>
           </div>
         </div>

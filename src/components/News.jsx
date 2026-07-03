@@ -134,8 +134,8 @@ export default function News() {
                         {article.title}
                       </h3>
                       <div className="flex justify-between text-xs text-gray-400">
-                        <span>{article.author}</span>
-                        <span>{article.readTime}</span>
+                        <span>{typeof article.author === 'object' ? article.author?.name : article.author || 'Staff'}</span>
+                        <span>{article.readTime || '5 min'}</span>
                       </div>
                     </div>
                   </div>

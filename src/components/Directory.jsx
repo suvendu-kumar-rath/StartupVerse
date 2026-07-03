@@ -17,7 +17,7 @@ export default function Directory() {
             id: post.id,
             initials: post.title?.substring(0, 2).toUpperCase() || 'CO',
             name: post.title?.split(' ')[0] || 'Company',
-            founder: post.author || 'Unknown',
+            founder: typeof post.author === 'object' ? post.author?.name : post.author || 'Unknown',
             location: post.category || 'Unknown',
             funding: '$0M',
             stage: 'Series A'

@@ -1,4 +1,5 @@
 import { useContext } from 'react'
+import { Link } from 'react-router-dom'
 import { ThemeContext } from '../App'
 
 export default function Header() {
@@ -15,11 +16,11 @@ export default function Header() {
         </div>
         
         <nav className={`flex gap-8 text-sm ${isDark ? '' : 'text-gray-800'}`}>
-          <a href="/" className="hover:text-orange-500 transition">Home</a>
-          <a href="/news" className="hover:text-orange-500 transition">News</a>
-          <a href="/stories" className="hover:text-orange-500 transition">Stories</a>
-          <a href="/directory" className="hover:text-orange-500 transition">Directory</a>
-          <a href="/magazine" className="hover:text-orange-500 transition">Magazine</a>
+          <Link to="/" className="hover:text-orange-500 transition">Home</Link>
+          <Link to="/news" className="hover:text-orange-500 transition">News</Link>
+          <Link to="/stories" className="hover:text-orange-500 transition">Stories</Link>
+          <Link to="/directory" className="hover:text-orange-500 transition">Directory</Link>
+          <Link to="/magazine" className="hover:text-orange-500 transition">Magazine</Link>
         </nav>
 
         <div className="flex items-center gap-4">

@@ -78,7 +78,7 @@ export default function TrendingSection() {
                     <div className="flex-1">
                       <div className="text-xs text-gray-400 uppercase tracking-wide mb-1">{item.category}</div>
                       <div className="font-serif text-lg md:text-xl font-bold leading-tight mb-1 hover:text-orange-500 transition">{item.title}</div>
-                      <div className="text-sm text-gray-400">{item.author || 'Staff'} · {item.readTime || '5 min'}</div>
+                      <div className="text-sm text-gray-400">{typeof item.author === 'object' ? item.author?.name : item.author || 'Staff'} · {item.readTime || '5 min'}</div>
                     </div>
                   </div>
                 </div>
