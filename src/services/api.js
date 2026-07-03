@@ -1,6 +1,6 @@
 // ==================== API Configuration ====================
-// Use proxy in development, direct URL in production
-const API_BASE_URL = import.meta.env.DEV ? '/api' : 'https://ampercent.in/api';
+// Use local API routes (works in both dev and production on Vercel)
+const API_BASE_URL = '/api';
 
 // ==================== VISITOR ID MANAGEMENT ====================
 /**
