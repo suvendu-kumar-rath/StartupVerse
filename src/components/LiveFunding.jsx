@@ -77,4 +77,5 @@ export default function LiveFunding() {
       </div>
     </section>
   )
+  //comment out the below code for now, as we are not using it currently. We can uncomment it later if needed.
 }
