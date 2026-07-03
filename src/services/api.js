@@ -1,6 +1,5 @@
 // ==================== API Configuration ====================
-// Use local API routes (works in both dev and production on Vercel)
-const API_BASE_URL = '/api';
+const API_BASE_URL = 'https://ampercent.in/api'; // Backend API URL
 
 // ==================== VISITOR ID MANAGEMENT ====================
 /**
@@ -34,12 +33,7 @@ async function getAllPosts(page = 1, limit = 10, category = null, trending = fal
     if (category) url += `&category=${category}`;
     if (trending) url += `&trending=true`;
     
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-      },
-    });
+    const response = await fetch(url);
     
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
