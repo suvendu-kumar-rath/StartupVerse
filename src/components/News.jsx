@@ -120,20 +120,23 @@ export default function News() {
                   to={`/post/${article.id}`}
                   className="no-underline"
                 >
-                  <div className="card-dark hover:bg-gray-900 transition cursor-pointer group overflow-hidden rounded-lg h-full">
-                    <div className="relative overflow-hidden h-48">
-                      <img
-                        src={article.image}
-                        alt={article.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
-                      />
-                    </div>
-                    <div className="p-4">
+                  <div className="card-dark hover:bg-gray-900 transition cursor-pointer group overflow-hidden rounded-lg h-full flex flex-col">
+                    {article.image && (
+                      <div className="relative overflow-hidden h-48">
+                        <img
+                          src={article.image}
+                          alt={article.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                        />
+                      </div>
+                    )}
+                    <div className="p-4 flex-1 flex flex-col">
                       <span className="text-xs font-semibold text-orange-500">{article.category}</span>
                       <h3 className="font-bold text-base mt-2 mb-3 leading-tight line-clamp-2">
                         {article.title}
                       </h3>
-                      <div className="flex justify-between text-xs text-gray-400">
+                      {article.excerpt && <p className="text-gray-400 text-sm mb-3 line-clamp-2">{article.excerpt}</p>}
+                      <div className="flex justify-between text-xs text-gray-400 mt-auto">
                         <span>{typeof article.author === 'object' ? article.author?.name : article.author || 'Staff'}</span>
                         <span>{article.readTime || '5 min'}</span>
                       </div>

@@ -1,27 +1,35 @@
+import { useState, useEffect } from 'react'
+import { getAllPosts } from '../services/api'
+
 export default function EventsSection() {
-  const events = [
-    {
-      badge: "CONFERENCE",
-      title: "StartupVerse Summit",
-      date: "Aug 15-16",
-      location: "San Francisco",
-      attendees: "2,400+"
-    },
-    {
-      badge: "NETWORKING",
-      title: "AI Founders Hack",
-      date: "Sep 20",
-      location: "Hybrid",
-      attendees: "500+"
-    },
-    {
-      badge: "WEBINAR",
-      title: "Climate Capital Night",
-      date: "Oct 08",
-      location: "NYC",
-      attendees: "300+"
+  const [events, setEvents] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        // Fetch posts marked as events
+        const response = await getAllPosts(1, 3, 'EVENTS')
+        if (response.success && response.data?.posts) {
+          setEvents(response.data.posts.map(post => ({
+            badge: post.eventType || "EVENT",
+            title: post.title,
+            date: post.eventDate || new Date().toLocaleDateString(),
+            location: post.location || "TBA",
+            attendees: post.attendees || "TBA"
+          })))
+        }
+      } catch (error) {
+        console.error('Error fetching events:', error)
+      } finally {
+        setLoading(false)
+      }
     }
-  ]
+
+    fetchEvents()
+  }, [])
+
+  if (loading || events.length === 0) return null
 
   return (
     <section className="max-w-6xl mx-auto px-6 py-12">

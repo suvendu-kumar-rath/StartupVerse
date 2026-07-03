@@ -33,13 +33,15 @@ export default function TrendingSection() {
             className="no-underline md:col-span-2"
           >
             <div className="rounded-lg overflow-hidden bg-gray-800 hover:opacity-90 transition cursor-pointer">
-              <img
-                src={trendingItems[0].image || 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&h=800&fit=crop'}
-                alt="Featured"
-                className="w-full h-80 md:h-96 object-cover rounded-lg"
-              />
+              {trendingItems[0].image && (
+                <img
+                  src={trendingItems[0].image}
+                  alt="Featured"
+                  className="w-full h-80 md:h-96 object-cover rounded-lg"
+                />
+              )}
 
-              <div className="px-6 py-6 bg-black">
+              <div className={`px-6 py-6 ${trendingItems[0].image ? 'bg-black' : 'bg-gray-900'}`}>
                 <div className="flex items-center gap-4 mb-3">
                   <span className="bg-orange-500 text-black px-3 py-1 rounded-full text-xs font-semibold">{trendingItems[0].category || 'FEATURED'}</span>
                   <span className="text-gray-400 uppercase tracking-wider text-xs">FEATURED STORY</span>
