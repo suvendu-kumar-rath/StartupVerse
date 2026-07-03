@@ -1,5 +1,6 @@
 // ==================== API Configuration ====================
-const API_BASE_URL = 'https://ampercent.in/api'; // Backend API URL
+// Use relative /api path - proxied by Vite in dev, rewritten by Vercel in production
+const API_BASE_URL = '/api';
 
 // ==================== VISITOR ID MANAGEMENT ====================
 /**
