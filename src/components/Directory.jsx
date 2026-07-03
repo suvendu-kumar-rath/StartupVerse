@@ -1,85 +1,11 @@
 import { useState, useEffect } from 'react'
 import { getAllPosts } from '../services/api'
 
-const fallbackCompanies = [
-  {
-    id: 1,
-    initials: 'LA',
-    name: 'Lumen AI',
-    founder: 'Riya Kapoor',
-    location: 'Bangalore, IN',
-    funding: '$612M',
-    stage: 'Series C'
-  },
-  {
-    id: 2,
-    initials: 'VG',
-    name: 'Volta Grid',
-      founder: 'Sam Okafor',
-      location: 'Berlin, DE',
-      funding: '$180M',
-      stage: 'Series B'
-    },
-    {
-      id: 3,
-      initials: 'NW',
-      name: 'Northwind',
-      founder: 'Mei Tanaka',
-      location: 'Seattle, US',
-      funding: '$94M',
-      stage: 'Series A'
-    },
-    {
-      id: 4,
-      initials: 'Pb',
-      name: 'Parable',
-      founder: 'Jonas Weber',
-      location: 'Lisbon, PT',
-      funding: '$41M',
-      stage: 'Seed+'
-    },
-    {
-      id: 5,
-      initials: 'Kp',
-      name: 'Kepler Bio',
-      founder: 'Dr. Lila Ahmed',
-      location: 'Boston, US',
-      funding: '$340M',
-      stage: 'Series C'
-    },
-    {
-      id: 6,
-      initials: 'HL',
-      name: 'Helix Labs',
-      founder: 'Theo Marchetti',
-      location: 'Zurich, CH',
-      funding: '$22M',
-      stage: 'Seed'
-    },
-    {
-      id: 7,
-      initials: 'AM',
-      name: 'Aurora Mobility',
-      founder: 'Carla Mendes',
-      location: 'Sao Paulo, BR',
-      funding: '$510M',
-      stage: 'Series D'
-    },
-    {
-      id: 8,
-      initials: 'SS',
-      name: 'Synth Studio',
-      founder: 'Yuki Park',
-      location: 'Tokyo, JP',
-      funding: '$31M',
-      stage: 'Series A'
-    }
-  ]
-
 export default function Directory() {
   const [searchQuery, setSearchQuery] = useState('')
   const [filterStage, setFilterStage] = useState('All')
-  const [companies, setCompanies] = useState(fallbackCompanies)
+  const [companies, setCompanies] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchCompanies = async () => {
@@ -87,20 +13,21 @@ export default function Directory() {
         const response = await getAllPosts(1, 100)
         if (response.success && response.data?.posts) {
           // Map posts to company format
-          const mappedCompanies = response.data.posts.map((post, idx) => ({
-            id: post.id || idx + 1,
+          const mappedCompanies = response.data.posts.map((post) => ({
+            id: post.id,
             initials: post.title?.substring(0, 2).toUpperCase() || 'CO',
             name: post.title?.split(' ')[0] || 'Company',
             founder: post.author || 'Unknown',
             location: post.category || 'Unknown',
-            funding: post.amount || '$0M',
-            stage: post.stage || 'Series A'
+            funding: '$0M',
+            stage: 'Series A'
           }))
-          setCompanies(mappedCompanies.length > 0 ? mappedCompanies : fallbackCompanies)
+          setCompanies(mappedCompanies)
         }
       } catch (error) {
         console.error('Error fetching companies:', error)
-        setCompanies(fallbackCompanies)
+      } finally {
+        setLoading(false)
       }
     }
 

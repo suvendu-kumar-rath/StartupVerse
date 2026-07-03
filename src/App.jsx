@@ -13,6 +13,7 @@ import News from './components/News'
 import Stories from './components/Stories'
 import Directory from './components/Directory'
 import Magazine from './components/Magazine'
+import PostDetail from './components/PostDetail'
 
 export const ThemeContext = createContext()
 
@@ -46,6 +47,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/news" element={<News />} />
           <Route path="/stories" element={<Stories />} />
+          <Route path="/post/:id" element={<PostDetail />} />
           <Route path="/directory" element={<Directory />} />
           <Route path="/magazine" element={<Magazine />} />
         </Routes>
