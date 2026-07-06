@@ -26,7 +26,7 @@ export default function Hero() {
   if (loading || !hero) return null
 
   return (
-    <section className="max-w-6xl mx-auto px-4 py-16">
+    <section className="max-w-6xl mx-auto px-6 py-16">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
         {/* Image */}
         {hero.image && (

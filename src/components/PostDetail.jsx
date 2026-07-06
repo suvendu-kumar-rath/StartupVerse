@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Share2, Copy, Share, MessageCircle, Mail } from 'lucide-react'
-import { getPostById } from '../services/api'
+import { getPostById, getPostImage } from '../services/api'
 
 export default function PostDetail() {
   const { id } = useParams()
@@ -182,11 +182,13 @@ export default function PostDetail() {
         </div>
 
         {/* Featured Image */}
-        <img
-          src={post.image || post.thumbnail || 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=500&fit=crop'}
-          alt={post.title}
-          className="w-full rounded-lg mb-12 object-cover h-96"
-        />
+        {getPostImage(post) && (
+          <img
+            src={getPostImage(post)}
+            alt={post.title}
+            className="w-full rounded-lg mb-12 object-cover h-96"
+          />
+        )}
 
         {/* Post Content */}
         <div className="prose prose-invert max-w-none mb-12">

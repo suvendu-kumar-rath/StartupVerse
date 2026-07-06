@@ -40,7 +40,7 @@ export default function LiveFunding() {
   const repeatedItems = [...fundingItems, ...fundingItems]
 
   return (
-    <section className="max-w-full bg-gray-100 text-black py-3 overflow-hidden">
+    <section className="bg-gray-100 text-black py-3 overflow-hidden">
       <style>{`
         @keyframes scroll {
           0% { transform: translateX(0); }

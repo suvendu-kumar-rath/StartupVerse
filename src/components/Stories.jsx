@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { getAllPosts } from '../services/api'
+import { getAllPosts, getPostImage } from '../services/api'
 
 export default function Stories() {
   const [founderInterviews, setFounderInterviews] = useState([])
@@ -33,13 +33,15 @@ export default function Stories() {
       className="no-underline"
     >
       <div className="card-dark hover:bg-gray-900 transition cursor-pointer group overflow-hidden h-full">
-        <div className="relative overflow-hidden h-56">
-          <img
-            src={story.image || story.thumbnail || 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=500&h=400&fit=crop'}
-            alt={story.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
-          />
-        </div>
+        {getPostImage(story) && (
+          <div className="relative overflow-hidden h-56">
+            <img
+              src={getPostImage(story)}
+              alt={story.title}
+              className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+            />
+          </div>
+        )}
         <div className="p-4">
           <span className="text-xs font-semibold text-orange-500">{story.category || 'STORY'}</span>
           <h3 className="font-bold text-lg mt-2 mb-3 leading-tight">

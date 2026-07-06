@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { getAllPosts } from '../services/api'
+import { getAllPosts, getPostImage } from '../services/api'
 
 export default function LatestSection() {
   const [articles, setArticles] = useState([])
@@ -38,10 +38,10 @@ export default function LatestSection() {
             className="no-underline"
           >
             <div className="card-dark hover:bg-gray-800 transition overflow-hidden group h-full flex flex-col">
-              {article.image ? (
+              {getPostImage(article) ? (
                 <div className="relative overflow-hidden h-48">
                   <img 
-                    src={article.image}
+                    src={getPostImage(article)}
                     alt={article.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
                   />

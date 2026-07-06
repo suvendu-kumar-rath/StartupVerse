@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { getAllPosts } from '../services/api'
+import { getAllPosts, getPostImage } from '../services/api'
 
 export default function ArticleSection() {
   const [article, setArticle] = useState(null)
@@ -42,10 +42,10 @@ export default function ArticleSection() {
           <a href="#" className="text-blue-400 hover:text-blue-300 font-semibold">Read the report →</a>
         </div>
 
-        {article.image && (
+        {getPostImage(article) && (
           <div className="w-full md:w-1/3 rounded-lg overflow-hidden flex-shrink-0">
             <img 
-              src={article.image}
+              src={getPostImage(article)}
               alt={article.title}
               className="w-full h-full object-cover"
             />

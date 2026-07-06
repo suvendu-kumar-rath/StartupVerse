@@ -1,35 +1,25 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { getAllPosts, getAllCategories } from '../services/api'
+import { getAllPosts, getPostImage } from '../services/api'
+
+const FIXED_CATEGORIES = ['ALL', 'FUNDING', 'FOUNDERS', 'AI', 'ANALYSIS', 'M&A']
 
 export default function News() {
   const [selectedCategory, setSelectedCategory] = useState('ALL')
   const [searchQuery, setSearchQuery] = useState('')
   const [articles, setArticles] = useState([])
-  const [categories, setCategories] = useState(['ALL', 'FUNDING', 'AI', 'FOUNDERS', 'CLIMATE', 'M&A', 'ANALYSIS', 'FAILURES', 'HARDWARE'])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  // Fetch posts and categories on component mount
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true)
-        
-        // Fetch posts
         const postsResponse = await getAllPosts(1, 50)
         if (postsResponse.success && postsResponse.data) {
           setArticles(postsResponse.data.posts || [])
         } else {
-          console.warn('Failed to fetch posts, using empty array')
           setArticles([])
-        }
-        
-        // Fetch categories
-        const categoriesResponse = await getAllCategories()
-        if (categoriesResponse.success && categoriesResponse.data) {
-          const categoryNames = categoriesResponse.data.map(cat => cat.name || cat).filter(Boolean)
-          setCategories(['ALL', ...categoryNames])
         }
       } catch (err) {
         console.error('Error fetching data:', err)
@@ -95,15 +85,15 @@ export default function News() {
                 />
               </div>
 
-              <div className="flex flex-wrap gap-3">
-                {categories.map(category => (
+              <div className="flex flex-wrap gap-4 items-center">
+                {FIXED_CATEGORIES.map(category => (
                   <button
                     key={category}
                     onClick={() => setSelectedCategory(category)}
-                    className={`px-4 py-2 rounded-full text-sm font-semibold transition ${
+                    className={`px-6 py-2 rounded-full text-sm font-semibold transition ${
                       selectedCategory === category
-                        ? 'bg-white text-black'
-                        : 'bg-transparent border border-gray-600 text-gray-300 hover:border-orange-500'
+                        ? 'bg-white text-black border-2 border-red-500'
+                        : 'bg-transparent border-2 border-transparent text-gray-300 hover:border-gray-500'
                     }`}
                   >
                     {category}
@@ -121,10 +111,10 @@ export default function News() {
                   className="no-underline"
                 >
                   <div className="card-dark hover:bg-gray-900 transition cursor-pointer group overflow-hidden rounded-lg h-full flex flex-col">
-                    {article.image && (
+                    {getPostImage(article) && (
                       <div className="relative overflow-hidden h-48">
                         <img
-                          src={article.image}
+                          src={getPostImage(article)}
                           alt={article.title}
                           className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
                         />

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { getAllPosts } from '../services/api'
+import { getAllPosts, getPostImage } from '../services/api'
 
 export default function TrendingSection() {
   const [trendingItems, setTrendingItems] = useState([])
@@ -33,15 +33,15 @@ export default function TrendingSection() {
             className="no-underline md:col-span-2"
           >
             <div className="rounded-lg overflow-hidden bg-gray-800 hover:opacity-90 transition cursor-pointer">
-              {trendingItems[0].image && (
+              {getPostImage(trendingItems[0]) && (
                 <img
-                  src={trendingItems[0].image}
+                  src={getPostImage(trendingItems[0])}
                   alt="Featured"
                   className="w-full h-80 md:h-96 object-cover rounded-lg"
                 />
               )}
 
-              <div className={`px-6 py-6 ${trendingItems[0].image ? 'bg-black' : 'bg-gray-900'}`}>
+              <div className={`px-6 py-6 ${getPostImage(trendingItems[0]) ? 'bg-black' : 'bg-gray-900'}`}>
                 <div className="flex items-center gap-4 mb-3">
                   <span className="bg-orange-500 text-black px-3 py-1 rounded-full text-xs font-semibold">{trendingItems[0].category || 'FEATURED'}</span>
                   <span className="text-gray-400 uppercase tracking-wider text-xs">FEATURED STORY</span>
