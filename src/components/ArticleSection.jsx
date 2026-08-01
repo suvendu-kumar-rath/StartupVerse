@@ -43,11 +43,11 @@ export default function ArticleSection() {
         </div>
 
         {getPostImage(article) && (
-          <div className="w-full md:w-1/3 rounded-lg overflow-hidden flex-shrink-0">
+          <div className="w-full md:w-1/3 h-64 rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center bg-gray-800">
             <img 
               src={getPostImage(article)}
               alt={article.title}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain"
             />
           </div>
         )}

@@ -34,11 +34,13 @@ export default function TrendingSection() {
           >
             <div className="rounded-lg overflow-hidden bg-gray-800 hover:opacity-90 transition cursor-pointer">
               {getPostImage(trendingItems[0]) && (
-                <img
-                  src={getPostImage(trendingItems[0])}
-                  alt="Featured"
-                  className="w-full h-80 md:h-96 object-cover rounded-lg"
-                />
+                <div className="w-full h-80 md:h-96 overflow-hidden flex items-center justify-center bg-gray-800">
+                  <img
+                    src={getPostImage(trendingItems[0])}
+                    alt="Featured"
+                    className="w-full h-full object-contain"
+                  />
+                </div>
               )}
 
               <div className={`px-6 py-6 ${getPostImage(trendingItems[0]) ? 'bg-black' : 'bg-gray-900'}`}>

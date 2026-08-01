@@ -183,11 +183,13 @@ export default function PostDetail() {
 
         {/* Featured Image */}
         {getPostImage(post) && (
-          <img
-            src={getPostImage(post)}
-            alt={post.title}
-            className="w-full rounded-lg mb-12 object-cover h-96"
-          />
+          <div className="w-full h-72 md:h-96 rounded-lg overflow-hidden mb-12 flex items-center justify-center bg-gray-900">
+            <img
+              src={getPostImage(post)}
+              alt={post.title}
+              className="w-full h-full object-contain"
+            />
+          </div>
         )}
 
         {/* Post Content */}

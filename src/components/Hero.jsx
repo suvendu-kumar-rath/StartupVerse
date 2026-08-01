@@ -30,11 +30,11 @@ export default function Hero() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
         {/* Image */}
         {hero.image && (
-          <div className="rounded-lg overflow-hidden">
+          <div className="rounded-lg overflow-hidden h-96 md:h-[520px] flex items-center justify-center bg-gray-900">
             <img
               src={hero.image}
               alt={hero.title}
-              className="w-full h-96 md:h-[520px] object-cover rounded-lg"
+              className="w-full h-full object-contain"
             />
           </div>
         )}

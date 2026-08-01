@@ -39,11 +39,11 @@ export default function LatestSection() {
           >
             <div className="card-dark hover:bg-gray-800 transition overflow-hidden group h-full flex flex-col">
               {getPostImage(article) ? (
-                <div className="relative overflow-hidden h-48">
+                <div className="relative overflow-hidden h-48 flex items-center justify-center bg-gray-800">
                   <img 
                     src={getPostImage(article)}
                     alt={article.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                    className="w-full h-full object-contain transition duration-300"
                   />
                 </div>
               ) : null}

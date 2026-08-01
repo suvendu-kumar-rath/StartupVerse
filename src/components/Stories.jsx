@@ -34,11 +34,11 @@ export default function Stories() {
     >
       <div className="card-dark hover:bg-gray-900 transition cursor-pointer group overflow-hidden h-full">
         {getPostImage(story) && (
-          <div className="relative overflow-hidden h-56">
+          <div className="relative overflow-hidden h-56 flex items-center justify-center bg-gray-800">
             <img
               src={getPostImage(story)}
               alt={story.title}
-              className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+              className="w-full h-full object-contain transition duration-300"
             />
           </div>
         )}
